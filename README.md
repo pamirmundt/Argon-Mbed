@@ -1,5 +1,5 @@
 ## Argon-Mbed-Examples
-[ ] Empty Template
+[ ]Empty Template
 ###### Basic
 [ ] Blink
 [ ] Serial Display
