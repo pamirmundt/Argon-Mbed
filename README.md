@@ -1,14 +1,16 @@
 ## Argon-Mbed-Examples
-- [ ] Empty Template
+- [X] Empty Template
 ###### Basic
-- [ ] Blink
-- [ ] Serial Display
+- [X] Serial Display
 - [ ] Realtime Variable Viewing
-- [ ] PWM
-- [ ] Read Encoder / RPM / AngVel
+- [X] PWM
+- [X] Read Encoder / RPM / AngVel
 - [ ] Read Motor Currents
 - [ ] Read IMU
 - [ ] Read I2C / SPI
+- [X] Argon Parameters
+- [X] Argon Joint
+- [X] Argon Motor
 ###### Kinematics
 - [ ] cartesianVelocityToWheelVelocities
 - [ ] wheelVelocitiesToCartesianVelocity
