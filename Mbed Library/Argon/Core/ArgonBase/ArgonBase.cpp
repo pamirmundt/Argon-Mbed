@@ -84,12 +84,12 @@ float ArgonBase::getLengthBetweenFrontWheels(void){
 }
 
 void ArgonBase::getVelocity(float & longitudinalVelocity, float &  transversalVelocity, float & angularVelocity){
-	float jointRPM1 = this->frontLeft.getJointRPM();
-	float jointRPM2 = this->frontRight.getJointRPM();
-	float jointRPM3 = this->rearLeft.getJointRPM();
-	float jointRPM4 = this->rearRight.getJointRPM();
+	float jointAngVel1 = this->frontLeft.getJointAngVel();
+	float jointAngVel2 = this->frontRight.getJointAngVel();
+	float jointAngVel3 = this->rearLeft.getJointAngVel();
+	float jointAngVel4 = this->rearRight.getJointAngVel();
 
-	this->kinematics.wheelVelocitiesToCartesianVelocity(jointRPM1, jointRPM2, jointRPM3, jointRPM4, longitudinalVelocity, transversalVelocity, angularVelocity);
+	this->kinematics.wheelVelocitiesToCartesianVelocity(jointAngVel1, jointAngVel2, jointAngVel3, jointAngVel4, longitudinalVelocity, transversalVelocity, angularVelocity);
 }
 
 float ArgonBase::getLongitudinalVelocity(void){
@@ -129,10 +129,10 @@ float ArgonBase::getAngularPosition(void){
 }
 
 void ArgonBase::updatePosition(void){
-	int16_t jointEncoder1 = this->frontLeft.getEncoderCount();
-	int16_t jointEncoder2 = this->frontRight.getEncoderCount();
-	int16_t jointEncoder3 = this->rearLeft.getEncoderCount();
-	int16_t jointEncoder4 = this->rearRight.getEncoderCount();
+	float jointPos1 = this->frontLeft.getJointPosition();
+	float jointPos2 = this->frontRight.getJointPosition();
+	float jointPos3 = this->rearLeft.getJointPosition();
+	float jointPos4 = this->rearRight.getJointPosition();
 
-	this->kinematics.wheelPositionsToCartesianPosition(jointEncoder1, jointEncoder2, jointEncoder3, jointEncoder4, this->longitudinalPosition, this->transversalPosition, this->angularPosition);
+	this->kinematics.wheelPositionsToCartesianPosition(jointPos1, jointPos2, jointPos3, jointPos4, this->longitudinalPosition, this->transversalPosition, this->angularPosition);
 }

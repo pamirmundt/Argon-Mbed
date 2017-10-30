@@ -4,16 +4,18 @@
 class baseKinematics{
 public:
 	baseKinematics(){};
-	void cartesianVelocityToWheelVelocities(float longitudinalVelocity, float transversalVelocity, float angularVelocity, float & jointRPM1, float & jointRPM2, float & jointRPM3, float & jointRPM4);
-	void wheelVelocitiesToCartesianVelocity(float jointRPM1, float jointRPM2, float jointRPM3, float jointRPM4, float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity);
-	void wheelPositionsToCartesianPosition(int16_t encPos1, int16_t encPos2, int16_t encPos3, int16_t encPos4, float & lastLongPos, float & lastTransPos, float &lastAngPos);
+	float rad2Rpm(float rad);
+	float rpm2Rad(float rpm);
+	void cartesianVelocityToWheelVelocities(float longitudinalVelocity, float transversalVelocity, float angularVelocity, float & jointAngVel1, float & jointAngVel2, float & jointAngVel3, float & jointAngVel4);
+	void wheelVelocitiesToCartesianVelocity(float jointAngVel1, float jointAngVel2, float jointAngVel3, float jointAngVel4, float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity);
+	void wheelPositionsToCartesianPosition(float jointAngPos1, float jointAngPos2, float jointAngPos3, float jointAngPos4, float & longitudinalPosition, float & transversalPosition, float &orientation);
 	void cartesianPositionToWheelPositions(float longitudinalPosition, float transversalPosition, float orientation, float & jointPosition1, float & jointPosition2, float & jointPosition3, float & jointPosition4);
 private:
 
-	float motorLastEncPos1;
-	float motorLastEncPos2;
-	float motorLastEncPos3;
-	float motorLastEncPos4;
+	float jointLastAngPos1;
+	float jointLastAngPos2;
+	float jointLastAngPos3;
+	float jointLastAngPos4;
 };
 
 #endif /* BASE_KINEMATICS_H */

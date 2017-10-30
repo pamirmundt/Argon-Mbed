@@ -19,45 +19,51 @@
 
 /* Functions -----------------------------------------------------------------*/
 /**
+ * Radian to RPM
+ * @param Radians
+ * @return RPM
+ */
+float baseKinematics::rad2Rpm(float rad){
+	return rad * RAD2RPM;
+}
+
+/**
+ * RPM to Radian
+ * @param RPM
+ * @return Radians
+ */
+float baseKinematics::rpm2Rad(float rpm){
+	return rpm * RPM2RAD;
+}
+
+/**
  * Calculates from the Cartesian velocity the individual wheel velocities
  * @param longitudinalVelocity - forward or backward velocity (m/s)
  * @param transversalVelocity - sideways velocity (m/s)
  * @param angularVelocity- rotational velocity around the center (rad/s)
- * @param jointRPM1 - joint 1 velocity to return (RPM)
- * @param jointRPM2 - joint 2 velocity to return (RPM)
- * @param jointRPM3 - joint 3 velocity to return (RPM)
- * @param jointRPM4 - joint 4 velocity to return (RPM)
+ * @param jointRPM1 - joint 1 velocity to return (rad/s)
+ * @param jointRPM2 - joint 2 velocity to return (rad/s)
+ * @param jointRPM3 - joint 3 velocity to return (rad/s)
+ * @param jointRPM4 - joint 4 velocity to return (rad/s)
  */
-void baseKinematics::cartesianVelocityToWheelVelocities(float longitudinalVelocity, float transversalVelocity, float angularVelocity, float & jointRPM1, float & jointRPM2, float & jointRPM3, float & jointRPM4){
-  float jointAngVel1 = (longitudinalVelocity - transversalVelocity - geomFactor*angularVelocity) / wheelRadius;
-  float jointAngVel2 = (longitudinalVelocity + transversalVelocity + geomFactor*angularVelocity) / wheelRadius;
-  float jointAngVel3 = (longitudinalVelocity + transversalVelocity - geomFactor*angularVelocity) / wheelRadius;
-  float jointAngVel4 = (longitudinalVelocity - transversalVelocity + geomFactor*angularVelocity) / wheelRadius;
-
-  //Angular velocity to RPM
-  jointRPM1 = jointAngVel1 * RAD2RPM;
-  jointRPM2 = jointAngVel2 * RAD2RPM;
-  jointRPM3 = jointAngVel3 * RAD2RPM;
-  jointRPM4 = jointAngVel4 * RAD2RPM;
+void baseKinematics::cartesianVelocityToWheelVelocities(float longitudinalVelocity, float transversalVelocity, float angularVelocity, float & jointAngVel1, float & jointAngVel2, float & jointAngVel3, float & jointAngVel4){
+  jointAngVel1 = (longitudinalVelocity - transversalVelocity - geomFactor*angularVelocity) / wheelRadius;
+  jointAngVel2 = (longitudinalVelocity + transversalVelocity + geomFactor*angularVelocity) / wheelRadius;
+  jointAngVel3 = (longitudinalVelocity + transversalVelocity - geomFactor*angularVelocity) / wheelRadius;
+  jointAngVel4 = (longitudinalVelocity - transversalVelocity + geomFactor*angularVelocity) / wheelRadius;
 }
 
 /**
  * Calculates from the wheel velocities the cartesian velocity
- * @param jointRPM1 - joint 1 velocity to return (RPM)
- * @param jointRPM2 - joint 2 velocity to return (RPM)
- * @param jointRPM3 - joint 3 velocity to return (RPM)
- * @param jointRPM4 - joint 4 velocity to return (RPM)
+ * @param jointRPM1 - joint 1 velocity to return (rad/s)
+ * @param jointRPM2 - joint 2 velocity to return (rad/s)
+ * @param jointRPM3 - joint 3 velocity to return (rad/s)
+ * @param jointRPM4 - joint 4 velocity to return (rad/s)
  * @param longitudinalVelocity - forward or backward velocity to return (m/s)
  * @param transversalVelocity - sideways velocity to return (m/s)
  * @param angularVelocity - rotational velocity around the center to return (rad/s)
  */
-void baseKinematics::wheelVelocitiesToCartesianVelocity(float jointRPM1, float jointRPM2, float jointRPM3, float jointRPM4, float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity){
-  //RPM to rad/s
-  float jointAngVel1 = jointRPM1 * RPM2RAD;
-  float jointAngVel2 = jointRPM2 * RPM2RAD;
-  float jointAngVel3 = jointRPM3 * RPM2RAD;
-  float jointAngVel4 = jointRPM4 * RPM2RAD;
-
+void baseKinematics::wheelVelocitiesToCartesianVelocity(float jointAngVel1, float jointAngVel2, float jointAngVel3, float jointAngVel4, float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity){
   longitudinalVelocity = (jointAngVel1 + jointAngVel2 + jointAngVel3 + jointAngVel4) * wheelRadius / 4.0f;
   transversalVelocity = (-jointAngVel1 + jointAngVel2 + jointAngVel3 - jointAngVel4) * wheelRadius / 4.0f;
   angularVelocity = (-jointAngVel1 + jointAngVel2 - jointAngVel3 + jointAngVel4) * wheelRadius / (4.0f * geomFactor);
@@ -65,32 +71,35 @@ void baseKinematics::wheelVelocitiesToCartesianVelocity(float jointRPM1, float j
 
 /**
  * Calculates from the cartesian position the wheel positions
- * @param encPos1 - Joint 1 Velocity
- * @param encPos2 - Joint 2 Velocity
- * @param encPos3 - Joint 3 Velocity
- * @param encPos4 - Joint 4 Velocity
+ * @param jointAngPos1
+ * @param jointAngPos2
+ * @param jointAngPos3
+ * @param jointAngPos4
+ * @param longitudinalPosition
+ * @param transversalPosition
+ * @param orientation
  */
-void baseKinematics::wheelPositionsToCartesianPosition(int16_t encPos1, int16_t encPos2, int16_t encPos3,int16_t encPos4, float & longitudinalPosition, float & transversalPosition, float & orientation){
+void baseKinematics::wheelPositionsToCartesianPosition(float jointAngPos1, float jointAngPos2, float jointAngPos3, float jointAngPos4, float & longitudinalPosition, float & transversalPosition, float & orientation){
     //Calculate Delta Encoder Position    
-    int16_t deltaPosJoint1 = encPos1 - motorLastEncPos1;;
-    int16_t deltaPosJoint2 = encPos2 - motorLastEncPos2;
-    int16_t deltaPosJoint3 = encPos3 - motorLastEncPos3;
-    int16_t deltaPosJoint4 = encPos4 - motorLastEncPos4;
+	float deltaAngPosJoint1 = jointAngPos1 - jointLastAngPos1;
+	float deltaAngPosJoint2 = jointAngPos2 - jointLastAngPos2;
+	float deltaAngPosJoint3 = jointAngPos3 - jointLastAngPos3;
+	float deltaAngPosJoint4 = jointAngPos4 - jointLastAngPos4;
 
     //Store Encoder Count for next iteration
-    motorLastEncPos1 = encPos1;
-    motorLastEncPos2 = encPos2;
-    motorLastEncPos3 = encPos3;
-    motorLastEncPos4 = encPos4;
+	jointLastAngPos1 = jointAngPos1;
+	jointLastAngPos2 = jointAngPos2;
+	jointLastAngPos3 = jointAngPos3;
+	jointLastAngPos4 = jointAngPos4;
 
     //Calculate Delta Longitudial Position in meters
-    float deltaLongitudinalPos = (float(deltaPosJoint1 + deltaPosJoint2 + deltaPosJoint3 + deltaPosJoint4) * 2.0f * M_PI * wheelRadius) / 4.0f / encoder_resolution / gearRatio / encoder_mode;
+    float deltaLongitudinalPos = (float(deltaAngPosJoint1 + deltaAngPosJoint2 + deltaAngPosJoint3 + deltaAngPosJoint4) * wheelRadius) / 4.0f;
     //Calculate Delta Transversal Position in meters
-    float deltaTransversalPos = (float(-deltaPosJoint1 + deltaPosJoint2 + deltaPosJoint3 - deltaPosJoint4) * 2.0f * M_PI * wheelRadius) / 4.0f / encoder_resolution / gearRatio / encoder_mode;
+    float deltaTransversalPos = (float(-deltaAngPosJoint1 + deltaAngPosJoint2 + deltaAngPosJoint3 - deltaAngPosJoint4) * wheelRadius) / 4.0f;
 
     //Calculate Base Position (x, y, theta)
     //Radians
-    orientation += (float(-deltaPosJoint1 + deltaPosJoint2 - deltaPosJoint3 + deltaPosJoint4) * 2.0f * M_PI * wheelRadius) / 4.0f / geomFactor / encoder_resolution / gearRatio / encoder_mode;
+    orientation += (float(-deltaAngPosJoint1 + deltaAngPosJoint2 - deltaAngPosJoint3 + deltaAngPosJoint4) * wheelRadius) / 4.0f / geomFactor;
 
     //Meters
     longitudinalPosition += deltaLongitudinalPos * cos(orientation) - deltaTransversalPos * sin(orientation);
