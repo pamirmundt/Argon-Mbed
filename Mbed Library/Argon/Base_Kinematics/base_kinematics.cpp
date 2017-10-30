@@ -112,11 +112,11 @@ void baseKinematics::cartesianPositionToWheelPositions(float longitudinalPositio
 	float Rad_FromX = longitudinalPosition / wheelRadius;
 	float Rad_FromY = transversalPosition / wheelRadius;
 
-	float Rad_FromTheta = geomFactor / wheelRadius;
+	float Rad_FromTheta = ( orientation * geomFactor) / wheelRadius;
 
-	jointPosition1 = -Rad_FromX + Rad_FromY + Rad_FromTheta;
+	jointPosition1 = Rad_FromX - Rad_FromY - Rad_FromTheta;
 	jointPosition2 = Rad_FromX + Rad_FromY + Rad_FromTheta;
-	jointPosition3 = -Rad_FromX - Rad_FromY + Rad_FromTheta;
+	jointPosition3 = Rad_FromX + Rad_FromY - Rad_FromTheta;
 	jointPosition4 = Rad_FromX - Rad_FromY + Rad_FromTheta;
 }
 

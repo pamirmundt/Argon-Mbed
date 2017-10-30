@@ -3,7 +3,7 @@
 
 class baseKinematics{
 public:
-	baseKinematics(){};
+	baseKinematics():jointLastAngPos1(0),jointLastAngPos2(0),jointLastAngPos3(0),jointLastAngPos4(0){};
 	float rad2Rpm(float rad);
 	float rpm2Rad(float rpm);
 	void cartesianVelocityToWheelVelocities(float longitudinalVelocity, float transversalVelocity, float angularVelocity, float & jointAngVel1, float & jointAngVel2, float & jointAngVel3, float & jointAngVel4);
