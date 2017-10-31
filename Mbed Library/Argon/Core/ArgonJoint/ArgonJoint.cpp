@@ -115,6 +115,11 @@ void ArgonJoint::setDirection(uint8_t direction){
 	HAL_GPIO_WritePin(this->_directionGpioPort, this->_directionGpioPin, state);
 }
 
+void ArgonJoint::setPower(float power){
+	power = power * float(Timer2CounterPeriod + 1) / 100.0f;
+	this->setPWM((int16_t) power);
+}
+
 void ArgonJoint::setPrevEncoderCount(int16_t prevMotorEncoderCount){
 	this->_prevEncoderCount = prevMotorEncoderCount;
 }
@@ -206,6 +211,10 @@ int16_t ArgonJoint::getPWM(void){
 			return PWM;
 		else
 			return -PWM;
+}
+
+float ArgonJoint::getPower(void){
+	return (100.0f * float(this->getPWM()) / float(Timer2CounterPeriod + 1) );
 }
 
 int16_t ArgonJoint::getEncoderCount(void){

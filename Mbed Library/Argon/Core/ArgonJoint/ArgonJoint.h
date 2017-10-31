@@ -54,7 +54,8 @@ class ArgonJoint{
 		void 									setEncoderTimer(TIM_HandleTypeDef);
 		//General Use
 		void 									setPWM(int16_t PWM);
-		void 									setDirection(uint8_t);
+		void 									setDirection(uint8_t direction);
+		void									setPower(float power);
 		//RPM Calculation
 		void	 								setPrevEncoderCount(int16_t);
 		void									setPrevRPM(float);
@@ -85,6 +86,7 @@ class ArgonJoint{
 
 		//General Use
 		int16_t 							getPWM(void);
+		float								getPower(void);
 		int16_t 							getEncoderCount(void);
 
 		float 								getJointRPM(void);
