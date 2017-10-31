@@ -10,8 +10,10 @@ public:
 	void wheelVelocitiesToCartesianVelocity(float jointAngVel1, float jointAngVel2, float jointAngVel3, float jointAngVel4, float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity);
 	void wheelPositionsToCartesianPosition(float jointAngPos1, float jointAngPos2, float jointAngPos3, float jointAngPos4, float & longitudinalPosition, float & transversalPosition, float &orientation);
 	void cartesianPositionToWheelPositions(float longitudinalPosition, float transversalPosition, float orientation, float & jointPosition1, float & jointPosition2, float & jointPosition3, float & jointPosition4);
-private:
+	void calcJacobian(float baseLongitudinal_J, float baseTransversal_J, float baseAngular_J, float & joint1_J, float & joint2_J, float & joint3_J, float & joint4_J);
+	void calcJacobianInverse(float joint1_J, float joint2_J, float joint3_J, float joint4_J, float & baseLongitudinal_J, float & baseTransversal_J, float & baseAngular_J);
 
+private:
 	float jointLastAngPos1;
 	float jointLastAngPos2;
 	float jointLastAngPos3;

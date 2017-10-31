@@ -108,6 +108,16 @@ void baseKinematics::wheelPositionsToCartesianPosition(float jointAngPos1, float
     transversalPosition += deltaLongitudinalPos * sin(orientation) + deltaTransversalPos * cos(orientation);
 }
 
+/**
+ *
+ * @param longitudinalPosition
+ * @param transversalPosition
+ * @param orientation
+ * @param jointPosition1
+ * @param jointPosition2
+ * @param jointPosition3
+ * @param jointPosition4
+ */
 void baseKinematics::cartesianPositionToWheelPositions(float longitudinalPosition, float transversalPosition, float orientation, float & jointPosition1, float & jointPosition2, float & jointPosition3, float & jointPosition4){
 	float Rad_FromX = longitudinalPosition / wheelRadius;
 	float Rad_FromY = transversalPosition / wheelRadius;
@@ -127,11 +137,11 @@ void baseKinematics::cartesianPositionToWheelPositions(float longitudinalPositio
 //@param base orientation force
 //@param returns wheel torques
 /*
-void calcJacobianT(float baseLongitudinalForce, float baseTransversalForce, float baseOrientationForce, float angularVelocity, float wheel1_refRPM, float wheel2_refRPM, float wheel3_refRPM, float wheel4_refRPM){    
-    wheel1Torque = baseLongitudinalForce*(cos(orientation)-sin(orientation))/sqrtf(2.0f) + baseTransversalForce*(sin(orientation)+cos(orientation))/sqrtf(2.0f) + baseOrientationForce*geomFactor*sqrtf(2.0f);
-    wheel2Torque = baseLongitudinalForce*(cos(orientation)+sin(orientation))/sqrtf(2.0f) + baseTransversalForce*(sin(orientation)-cos(orientation))/sqrtf(2.0f) - baseOrientationForce*geomFactor*sqrtf(2.0f);
-    wheel3Torque = baseLongitudinalForce*(cos(orientation)+sin(orientation))/sqrtf(2.0f) + baseTransversalForce*(sin(orientation)-cos(orientation))/sqrtf(2.0f) + baseOrientationForce*geomFactor*sqrtf(2.0f);
-    wheel4Torque = baseLongitudinalForce*(cos(orientation)-sin(orientation))/sqrtf(2.0f) + baseTransversalForce*(sin(orientation)+cos(orientation))/sqrtf(2.0f) - baseOrientationForce*geomFactor*sqrtf(2.0f);
+void calcJacobianTranspose(float baseLongitudinalForce, float baseTransversalForce, float baseOrientationForce, float angularVelocity, float wheel1_refRPM, float wheel2_refRPM, float wheel3_refRPM, float wheel4_refRPM){
+    wheel1Torque = baseLongitudinalForce * (cos(orientation) - sin(orientation)) / sqrtf(2.0f) + baseTransversalForce * (sin(orientation) + cos(orientation)) / sqrtf(2.0f) + baseOrientationForce * geomFactor * sqrtf(2.0f);
+    wheel2Torque = baseLongitudinalForce * (cos(orientation) + sin(orientation)) / sqrtf(2.0f) + baseTransversalForce * (sin(orientation) - cos(orientation)) / sqrtf(2.0f) - baseOrientationForce * geomFactor * sqrtf(2.0f);
+    wheel3Torque = baseLongitudinalForce * (cos(orientation) + sin(orientation)) / sqrtf(2.0f) + baseTransversalForce * (sin(orientation) - cos(orientation)) / sqrtf(2.0f) + baseOrientationForce * geomFactor * sqrtf(2.0f);
+    wheel4Torque = baseLongitudinalForce * (cos(orientation) - sin(orientation)) / sqrtf(2.0f) + baseTransversalForce * (sin(orientation) + cos(orientation)) / sqrtf(2.0f) - baseOrientationForce * geomFactor * sqrtf(2.0f);
 
     wheel1_refRPM = wheel1Torque;
     wheel2_refRPM = wheel2Torque;
@@ -139,3 +149,36 @@ void calcJacobianT(float baseLongitudinalForce, float baseTransversalForce, floa
     wheel4_refRPM = wheel4Torque;
 }
 */
+
+/**
+ * Local (joint space)
+ * @param baseLongitudinal_J
+ * @param baseTransversal_J
+ * @param baseOrientation_J
+ * @param joint1_J
+ * @param joint2_J
+ * @param joint3_J
+ * @param joint4_J
+ */
+void baseKinematics::calcJacobian(float baseLongitudinal_J, float baseTransversal_J, float baseAngular_J, float & joint1_J, float & joint2_J, float & joint3_J, float & joint4_J){
+	joint1_J = (baseLongitudinal_J - baseTransversal_J - baseAngular_J * geomFactor) / wheelRadius;
+	joint2_J = (baseLongitudinal_J + baseTransversal_J + baseAngular_J * geomFactor) / wheelRadius;
+	joint3_J = (baseLongitudinal_J + baseTransversal_J - baseAngular_J * geomFactor) / wheelRadius;
+	joint4_J = (baseLongitudinal_J - baseTransversal_J + baseAngular_J * geomFactor) / wheelRadius;
+}
+
+/**
+ * Local (task space)
+ * @param joint1_J
+ * @param joint2_J
+ * @param joint3_J
+ * @param joint4_J
+ * @param baseLongitudinal_J
+ * @param baseTransversal_J
+ * @param baseAngular_J
+ */
+void baseKinematics::calcJacobianInverse(float joint1_J, float joint2_J, float joint3_J, float joint4_J, float & baseLongitudinal_J, float & baseTransversal_J, float & baseAngular_J){
+	baseLongitudinal_J = (joint1_J + joint2_J + joint3_J + joint4_J) * wheelRadius / 4.0f;
+	baseTransversal_J = (- joint1_J + joint2_J + joint3_J - joint4_J) * wheelRadius / 4.0f ;
+	baseAngular_J = (- joint1_J + joint2_J - joint3_J + joint4_J) * wheelRadius / (4.0f * geomFactor);
+}
