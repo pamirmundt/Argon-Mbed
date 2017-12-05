@@ -65,6 +65,7 @@
 
 
 void Error_Handler(void);
+void MX_SPI3_Init(void);
 void MX_GPIO_Init(void);
 void MX_TIM1_Init(void);
 void MX_TIM3_Init(void);

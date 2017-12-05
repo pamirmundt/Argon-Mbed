@@ -8,6 +8,7 @@
 
 /* External fucnitons --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+extern void MX_SPI3_Init(void);
 extern void MX_GPIO_Init(void);
 extern void MX_TIM1_Init(void);
 extern void MX_TIM3_Init(void);
@@ -24,6 +25,8 @@ TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim8;
 
+SPI_HandleTypeDef hspi3;
+
 /* Prototype Functions -------------------------------------------------------*/
 void baseInit(void);
 void baseEncoderStart(void);
@@ -34,6 +37,7 @@ void basePwmStart(void);
 void baseInit(void){
     //initialize GPIO and Timers
     MX_GPIO_Init();
+    MX_SPI3_Init();
     MX_TIM1_Init();
     MX_TIM3_Init();
     MX_TIM4_Init();
