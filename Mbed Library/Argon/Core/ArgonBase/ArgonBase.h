@@ -44,7 +44,9 @@ class ArgonBase{
 		this->frontLeft.setNumber(1);
 		this->frontLeft.setName((char *)"frontLeft");
 		this->frontLeft.setGearRatio(gearRatio);
+		this->frontLeft.setWheelRadius(wheelRadius);
 		this->frontLeft.setEncoderTicksPerRound(encoder_resolution);
+		this->frontLeft.setQuadEncoderTicksPerRound(encoder_resolution*encoder_mode);
 		this->frontLeft.setPWMTimer(htim2, TIM_CHANNEL_1);
 		this->frontLeft.setDefaultDirection(counterClockWise);
 		this->frontLeft.setDirectionGPIO(motorDirection1_GPIO_Port, motorDirection1_Pin);
@@ -53,7 +55,9 @@ class ArgonBase{
 		this->frontRight.setNumber(2);
 		this->frontRight.setName((char *)"frontRight");
 		this->frontRight.setGearRatio(gearRatio);
+		this->frontRight.setWheelRadius(wheelRadius);
 		this->frontRight.setEncoderTicksPerRound(encoder_resolution);
+		this->frontRight.setQuadEncoderTicksPerRound(encoder_resolution*encoder_mode);
 		this->frontRight.setPWMTimer(htim2, TIM_CHANNEL_2);
 		this->frontRight.setDefaultDirection(clockWise);
 		this->frontRight.setDirectionGPIO(motorDirection2_GPIO_Port, motorDirection2_Pin);
@@ -62,7 +66,9 @@ class ArgonBase{
 		this->rearLeft.setNumber(3);
 		this->rearLeft.setName((char *)"rearLeft");
 		this->rearLeft.setGearRatio(gearRatio);
+		this->rearLeft.setWheelRadius(wheelRadius);
 		this->rearLeft.setEncoderTicksPerRound(encoder_resolution);
+		this->rearLeft.setQuadEncoderTicksPerRound(encoder_resolution*encoder_mode);
 		this->rearLeft.setPWMTimer(htim2, TIM_CHANNEL_3);
 		this->rearLeft.setDefaultDirection(counterClockWise);
 		this->rearLeft.setDirectionGPIO(motorDirection3_GPIO_Port, motorDirection3_Pin);
@@ -71,7 +77,9 @@ class ArgonBase{
 		this->rearRight.setNumber(4);
 		this->rearRight.setName((char *)"frontRight");
 		this->rearRight.setGearRatio(gearRatio);
+		this->rearRight.setWheelRadius(wheelRadius);
 		this->rearRight.setEncoderTicksPerRound(encoder_resolution);
+		this->rearRight.setQuadEncoderTicksPerRound(encoder_resolution*encoder_mode);
 		this->rearRight.setPWMTimer(htim2, TIM_CHANNEL_4);
 		this->rearRight.setDefaultDirection(clockWise);
 		this->rearRight.setDirectionGPIO(motorDirection4_GPIO_Port, motorDirection4_Pin);

@@ -69,8 +69,8 @@ class ArgonJoint{
 		uint8_t 							getNumber(void);
 		float 								getWheelRadius(void);
 		float 								getGearRatio(void);
-		uint16_t 							getEncoderTicksPerRound(void);
-		uint16_t 							getQuadEncoderTicksPerRound(void);
+		float 								getEncoderTicksPerRound(void);
+		float	 							getQuadEncoderTicksPerRound(void);
 		float 								getMaximumRPM(void);
 		float 								getMaximumAngularVelocity(void);
 		//Timer Inits
@@ -110,8 +110,8 @@ class ArgonJoint{
 		uint8_t 							_motorNumber;
 		float 								_wheelRadius;
 		float								_gearRatio;
-		uint16_t							_encoderTicksPerRound;
-		uint16_t							_quadEncoderTicksPerRound;
+		float								_encoderTicksPerRound;
+		float								_quadEncoderTicksPerRound;
 		float								_maximumRPM;
 		float								_maximumAngularVelocity;
 	

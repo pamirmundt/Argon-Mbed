@@ -46,8 +46,8 @@ void ArgonJoint::setWheelRadius(float wheelRad){	//-> Change Here
 	this->_wheelRadius = wheelRad;
 }
 
-void ArgonJoint::setGearRatio(float gearRati){	//-> Change Here
-	this->_gearRatio = gearRati;
+void ArgonJoint::setGearRatio(float gearRatio_){	//-> Change Here
+	this->_gearRatio = gearRatio_;
 }
 
 void ArgonJoint::setEncoderTicksPerRound(uint16_t encoderTicksPerRound){
@@ -154,11 +154,11 @@ float ArgonJoint::getGearRatio(void){
 	return this->_gearRatio;
 }
 
-uint16_t ArgonJoint::getEncoderTicksPerRound(void){
+float ArgonJoint::getEncoderTicksPerRound(void){
 	return this->_encoderTicksPerRound;
 }
 
-uint16_t ArgonJoint::getQuadEncoderTicksPerRound(void){
+float ArgonJoint::getQuadEncoderTicksPerRound(void){
 	return this->_quadEncoderTicksPerRound;
 }
 

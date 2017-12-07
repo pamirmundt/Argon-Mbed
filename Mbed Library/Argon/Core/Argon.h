@@ -5,6 +5,7 @@
 //#include "Adafruit_Sensor.h"
 #include "Adafruit_BNO055.h"
 #include "ArgonBase.h"
+#include "ArgonSPI.h"
 //#include "imumaths.h"
 
 #endif /* ARGON_H */
