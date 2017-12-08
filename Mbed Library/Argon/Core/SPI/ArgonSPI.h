@@ -37,4 +37,14 @@ int getLongitudinalPosition(ArgonBase &myBase);
 int getTransversalPosition(ArgonBase &myBase);
 int getAngularPosition(ArgonBase &myBase);
 
+int setWheelRadius(int CMD, ArgonBase &myBase);
+int setGearRatio(int CMD, ArgonBase &myBase);
+int setEncoderTicksPerRound(int CMD, ArgonBase &myBase);
+int setQuadEncoderTicksPerRound(int CMD, ArgonBase &myBase);
+int setMaximumRPM(int CMD, ArgonBase &myBase);
+int setMaximumAngularVelocity(int CMD, ArgonBase &myBase);
+int setPWM(int CMD, ArgonBase &myBase);
+int setDirection(int CMD, ArgonBase &myBase);
+int setPower(int CMD, ArgonBase &myBase);
+
 #endif /* MOTOR_H */

@@ -8,6 +8,7 @@ extern SPI_HandleTypeDef hspi3;
 
 #define CHECK_SPI 									0xAA
 
+/* Gets ----------------------------------------------------------------------*/
 //Wheel
 #define GET_WHEEL_NUMBER							0x21
 #define GET_WHEEL_RADIUS							0x22
@@ -41,6 +42,18 @@ extern SPI_HandleTypeDef hspi3;
 #define GET_ANGULAR_POSITION						0x49
 //#define updatePosition							0x4A
 
+/* Sets ----------------------------------------------------------------------*/
+//#define SET_NAME 									0x60
+//#define SET_NUMBER 								0x61
+#define SET_WHEEL_RADIUS 							0x62
+#define SET_GEAR_RATIO 								0x63
+#define SET_ENCODER_TICKS_PER_ROUND 				0x64
+#define SET_QUAD_ENCODER_TICKS_PER_ROUND 			0x65
+#define SET_MAXIMUM_RPM 							0x66
+#define SET_MAXIMUM_ANGULAR_VELOCITY 				0x67
+#define SET_PWM 									0x68
+#define SET_DIRECTION 								0x69
+#define SET_POWER 									0x6A
 
 int ArgonSPIHander(ArgonBase &myBase){
 
@@ -53,6 +66,7 @@ int ArgonSPIHander(ArgonBase &myBase){
 		case CHECK_SPI:
 			checkSPI();
 			break;
+		/* GETS --------------------------------------------------------------*/
 		case GET_WHEEL_NUMBER:
 			getWheelNumber(CMD[1], myBase);
 			break;
@@ -138,6 +152,36 @@ int ArgonSPIHander(ArgonBase &myBase){
 			getAngularPosition(myBase);
 			break;
 
+		/* SETS --------------------------------------------------------------*/
+		//case SET_NAME:
+		//	break;
+		case SET_WHEEL_RADIUS:
+			setWheelRadius(CMD[1], myBase);
+			break;
+		case SET_GEAR_RATIO:
+			setGearRatio(CMD[1], myBase);
+			break;
+		case SET_ENCODER_TICKS_PER_ROUND:
+			setEncoderTicksPerRound(CMD[1], myBase);
+			break;
+		case SET_QUAD_ENCODER_TICKS_PER_ROUND:
+			setQuadEncoderTicksPerRound(CMD[1], myBase);
+			break;
+		case SET_MAXIMUM_RPM:
+			setMaximumRPM(CMD[1], myBase);
+			break;
+		case SET_MAXIMUM_ANGULAR_VELOCITY:
+			setMaximumAngularVelocity(CMD[1], myBase);
+			break;
+		case SET_PWM:
+			setPWM(CMD[1], myBase);
+			break;
+		case SET_DIRECTION:
+			setDirection(CMD[1], myBase);
+			break;
+		case SET_POWER:
+			setPower(CMD[1], myBase);
+			break;
 		default:
 			break;
 	}
@@ -151,6 +195,8 @@ int checkSPI(void){
 	return HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, 1, TxRxTimeout);
 }
 
+
+/* Gets ----------------------------------------------------------------------*/
 int getWheelNumber(int CMD, ArgonBase &myBase){
 	uint8_t RX[1] = {0};
 	uint8_t TX[1] = {0};
@@ -734,4 +780,266 @@ int getAngularPosition(ArgonBase &myBase){
 	memcpy(TX, &pos, sizeof(float));
 
 	return HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+}
+
+/* Sets ----------------------------------------------------------------------*/
+int setWheelRadius(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float radius;
+	memcpy(&radius, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setWheelRadius(radius);
+			break;}
+		case 2:{
+			myBase.frontRight.setWheelRadius(radius);
+			break;}
+		case 3:{
+			myBase.rearLeft.setWheelRadius(radius);
+			break;}
+		case 4:{
+			myBase.rearRight.setWheelRadius(radius);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setGearRatio(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float radius;
+	memcpy(&radius, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setGearRatio(radius);
+			break;}
+		case 2:{
+			myBase.frontRight.setGearRatio(radius);
+			break;}
+		case 3:{
+			myBase.rearLeft.setGearRatio(radius);
+			break;}
+		case 4:{
+			myBase.rearRight.setGearRatio(radius);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setEncoderTicksPerRound(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float ticksPerRound;
+	memcpy(&ticksPerRound, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setEncoderTicksPerRound(ticksPerRound);
+			break;}
+		case 2:{
+			myBase.frontRight.setEncoderTicksPerRound(ticksPerRound);
+			break;}
+		case 3:{
+			myBase.rearLeft.setEncoderTicksPerRound(ticksPerRound);
+			break;}
+		case 4:{
+			myBase.rearRight.setEncoderTicksPerRound(ticksPerRound);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setQuadEncoderTicksPerRound(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float quadTicksPerRound;
+	memcpy(&quadTicksPerRound, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setQuadEncoderTicksPerRound(quadTicksPerRound);
+			break;}
+		case 2:{
+			myBase.frontRight.setQuadEncoderTicksPerRound(quadTicksPerRound);
+			break;}
+		case 3:{
+			myBase.rearLeft.setQuadEncoderTicksPerRound(quadTicksPerRound);
+			break;}
+		case 4:{
+			myBase.rearRight.setQuadEncoderTicksPerRound(quadTicksPerRound);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setMaximumRPM(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float maxRPM;
+	memcpy(&maxRPM, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setMaximumRPM(maxRPM);
+			break;}
+		case 2:{
+			myBase.frontRight.setMaximumRPM(maxRPM);
+			break;}
+		case 3:{
+			myBase.rearLeft.setMaximumRPM(maxRPM);
+			break;}
+		case 4:{
+			myBase.rearRight.setMaximumRPM(maxRPM);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setMaximumAngularVelocity(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float maxAngVel;
+	memcpy(&maxAngVel, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setMaximumAngularVelocity(maxAngVel);
+			break;}
+		case 2:{
+			myBase.frontRight.setMaximumAngularVelocity(maxAngVel);
+			break;}
+		case 3:{
+			myBase.rearLeft.setMaximumAngularVelocity(maxAngVel);
+			break;}
+		case 4:{
+			myBase.rearRight.setMaximumAngularVelocity(maxAngVel);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setPWM(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(int16_t)] = {0};	//int16_t
+	uint8_t TX[sizeof(int16_t)] = {0};	//int16_t
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(int16_t), TxRxTimeout);
+
+	int16_t pwm;
+	memcpy(&pwm, RX, sizeof(int16_t));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setPWM(pwm);
+			break;}
+		case 2:{
+			myBase.frontRight.setPWM(pwm);
+			break;}
+		case 3:{
+			myBase.rearLeft.setPWM(pwm);
+			break;}
+		case 4:{
+			myBase.rearRight.setPWM(pwm);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setDirection(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(uint8_t)] = {0};	//uint8_t
+	uint8_t TX[sizeof(uint8_t)] = {0};	//uint8_t
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(uint8_t), TxRxTimeout);
+
+	uint8_t dir;
+	memcpy(&dir, RX, sizeof(uint8_t));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setDirection(dir);
+			break;}
+		case 2:{
+			myBase.frontRight.setDirection(dir);
+			break;}
+		case 3:{
+			myBase.rearLeft.setDirection(dir);
+			break;}
+		case 4:{
+			myBase.rearRight.setDirection(dir);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
+}
+
+int setPower(int CMD, ArgonBase &myBase){
+	uint8_t RX[sizeof(float)] = {0};	//float
+	uint8_t TX[sizeof(float)] = {0};	//float
+
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)TX, (uint8_t*)RX, sizeof(float), TxRxTimeout);
+
+	float power;
+	memcpy(&power, RX, sizeof(float));
+	switch (CMD){
+		case 1:{
+			myBase.frontLeft.setPower(power);
+			break;}
+		case 2:{
+			myBase.frontRight.setPower(power);
+			break;}
+		case 3:{
+			myBase.rearLeft.setPower(power);
+			break;}
+		case 4:{
+			myBase.rearRight.setPower(power);
+			break;}
+		default:{
+			return -1;
+			break;}
+	}
+
+	return 0;
 }

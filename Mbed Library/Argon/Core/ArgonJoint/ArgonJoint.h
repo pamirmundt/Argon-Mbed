@@ -41,8 +41,8 @@ class ArgonJoint{
 		void 									setNumber(uint8_t);
 		void 									setWheelRadius(float);
 		void 									setGearRatio(float);
-		void 									setEncoderTicksPerRound(uint16_t);
-		void 									setQuadEncoderTicksPerRound(uint16_t);
+		void 									setEncoderTicksPerRound(float);
+		void 									setQuadEncoderTicksPerRound(float);
 		void 									setMaximumRPM(float);
 		void 									setMaximumAngularVelocity(float);
 		//PWM Timer Inits

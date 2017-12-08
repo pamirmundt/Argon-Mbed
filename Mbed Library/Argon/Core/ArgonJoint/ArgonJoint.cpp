@@ -50,11 +50,11 @@ void ArgonJoint::setGearRatio(float gearRatio_){	//-> Change Here
 	this->_gearRatio = gearRatio_;
 }
 
-void ArgonJoint::setEncoderTicksPerRound(uint16_t encoderTicksPerRound){
+void ArgonJoint::setEncoderTicksPerRound(float encoderTicksPerRound){
 	this->_encoderTicksPerRound = encoderTicksPerRound;
 }
 
-void ArgonJoint::setQuadEncoderTicksPerRound(uint16_t quadEncoderTicksPerRound){
+void ArgonJoint::setQuadEncoderTicksPerRound(float quadEncoderTicksPerRound){
 	this->_quadEncoderTicksPerRound = quadEncoderTicksPerRound;
 }
 
