@@ -78,7 +78,6 @@ namespace argon{
         // Joint Extension
         //----------------------------------------------------------------------
         // Sets
-        
         void        setPWM(uint8_t jointNum, int16_t PWM);
         void        setPower(uint8_t jointNumber, float power);
         

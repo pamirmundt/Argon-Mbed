@@ -72,10 +72,36 @@ namespace argon{
 
         /* Gets */
         //Config
-        uint8_t getDoF(void);
+        uint8_t         getDoF(void);
+        
+        //----------------------------------------------------------------------
+        // Joint Extension
+        //----------------------------------------------------------------------
+        // Sets
+        void        setPWM(uint8_t jointNum, int16_t PWM);
+        void        setPower(uint8_t jointNumber, float power);
+        
+        //Gets
+        bool        getAvailable(uint8_t jointNum);
+        uint8_t     getNumber(uint8_t jointNum);
+        float       getGearRatio(uint8_t jointNum);    
+        uint16_t    getEncoderTicksPerRound(uint8_t jointNum);
+        uint8_t     getEncodingMode(uint8_t jointNum);
+        int16_t     getPwm(uint8_t jointNum);
+        uint16_t    getPwmResolution(uint8_t jointNum);
+        float       getPower(uint8_t jointNum);
+        int8_t      getDirection(uint8_t jointNum);       
+        int32_t     getEncoderCount(uint8_t jointNum);
+        float       getJointPosition(uint8_t jointNum);
+        float       getMotorPosition(uint8_t jointNum);
+        float       getMotorRPM(uint8_t jointNum);
+        float       getJointRPM(uint8_t jointNum);
+        float       getMotorAngVel(uint8_t jointNum);
+        float       getJointAngVel(uint8_t jointNum);
         
     private:
-        void armInit(void);
+        void            armInit(void);
+        ArgonJoint*     getJoint(uint8_t jointNumber);
         
         uint8_t _DoF;
     

@@ -74,7 +74,7 @@ ArgonJoint* ArgonBase::getJoint(uint8_t jointNum){
             break;
         case 4:
             retJoint = &ArgonJoint::joint4_Instance();
-            break;            
+            break;
         // else return joint1
         default:
             retJoint = &ArgonJoint::joint1_Instance();
