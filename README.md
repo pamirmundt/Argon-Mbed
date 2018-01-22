@@ -1,5 +1,6 @@
 ## Argon-Mbed-Examples
 - [X] Empty Template
+
 ###### Basic
 - [X] Serial Display
 - [ ] Realtime Variable Viewing
