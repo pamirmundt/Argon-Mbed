@@ -63,6 +63,26 @@ void ArgonBase::baseInit(void){
     
 }
 
+ArgonJoint* ArgonBase::getJoint(uint8_t jointNum){
+    ArgonJoint * retJoint;
+    switch (jointNum){
+        case 2:
+            retJoint = &ArgonJoint::joint2_Instance();
+            break;
+        case 3:
+            retJoint = &ArgonJoint::joint3_Instance();
+            break;
+        case 4:
+            retJoint = &ArgonJoint::joint4_Instance();
+            break;            
+        // else return joint1
+        default:
+            retJoint = &ArgonJoint::joint1_Instance();
+            break;
+    }    
+    return retJoint;
+}
+
 
 /* Sets */
 //Config
@@ -86,4 +106,81 @@ float ArgonBase::getLengthBetweenFrontWheels(void){
 
 float ArgonBase::getGeomFactor(void){
     return _geomFactor;
+}
+
+//------------------------------------------------------------------------------
+// Joint Extension
+//------------------------------------------------------------------------------
+// Sets
+void ArgonBase::setPWM(uint8_t jointNum,int16_t PWM){
+    getJoint(jointNum)->setPWM(PWM);
+}
+
+void ArgonBase::setPower(uint8_t jointNum, float power){
+    getJoint(jointNum)->setPower(power);
+}
+
+// Gets
+bool ArgonBase::getAvailable(uint8_t jointNum){
+    return getJoint(jointNum)->getAvailable();
+}
+
+uint8_t ArgonBase::getNumber(uint8_t jointNum){
+    return getJoint(jointNum)->getNumber();
+}
+
+float ArgonBase::getGearRatio(uint8_t jointNum){
+    return getJoint(jointNum)->getGearRatio();
+}
+
+uint16_t ArgonBase::getEncoderTicksPerRound(uint8_t jointNum){
+    return getJoint(jointNum)->getEncoderTicksPerRound();
+}
+
+uint8_t ArgonBase::getEncodingMode(uint8_t jointNum){
+    return getJoint(jointNum)->getEncodingMode();
+}
+
+int16_t ArgonBase::getPwm(uint8_t jointNum){
+    return getJoint(jointNum)->getPwm();
+}
+
+uint16_t ArgonBase::getPwmResolution(uint8_t jointNum){
+    return getJoint(jointNum)->getPwmResolution();
+}
+
+float ArgonBase::getPower(uint8_t jointNum){
+    return getJoint(jointNum)->getPower();
+}
+
+int8_t ArgonBase::getDirection(uint8_t jointNum){
+    return getJoint(jointNum)->getDirection();
+}
+
+int32_t ArgonBase::getEncoderCount(uint8_t jointNum){
+    return getJoint(jointNum)->getEncoderCount();
+}
+
+float ArgonBase::getJointPosition(uint8_t jointNum){
+    return getJoint(jointNum)->getJointPosition();
+}
+
+float ArgonBase::getMotorPosition(uint8_t jointNum){
+    return getJoint(jointNum)->getMotorPosition();
+}
+
+float ArgonBase::getMotorRPM(uint8_t jointNum){
+    return getJoint(jointNum)->getMotorRPM();
+}
+
+float ArgonBase::getJointRPM(uint8_t jointNum){
+    return getJoint(jointNum)->getJointRPM();
+}
+
+float ArgonBase::getMotorAngVel(uint8_t jointNum){
+    return getJoint(jointNum)->getMotorAngVel();
+}
+
+float ArgonBase::getJointAngVel(uint8_t jointNum){
+    return getJoint(jointNum)->getJointAngVel();
 }

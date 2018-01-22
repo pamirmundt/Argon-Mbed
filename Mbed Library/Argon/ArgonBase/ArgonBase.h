@@ -59,28 +59,56 @@ namespace argon{
 
         /* Gets */
         //Config
-        float getWheelRadius(void);
-        float getLengthBetweenFrontAndRearWheels(void);
-        float getLengthBetweenFrontWheels(void);
-        float getGeomFactor(void);
+        float       getWheelRadius(void);
+        float       getLengthBetweenFrontAndRearWheels(void);
+        float       getLengthBetweenFrontWheels(void);
+        float       getGeomFactor(void);
         //Velocity
-        void getVelocity(float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity);
-        float getLongitudinalVelocity(void);
-        float getTransversalVelocity(void);
-        float getAngularVelocity(void);
+        void        getVelocity(float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity);
+        float       getLongitudinalVelocity(void);
+        float       getTransversalVelocity(void);
+        float       getAngularVelocity(void);
         //Position
-        void getPosition(float & longitudinalPosition, float & transversalPosition, float & angularPosition);
-        float getLongitudinalPosition(void);
-        float getTransversalPosition(void);
-        float getAngularPosition(void);
+        void        getPosition(float & longitudinalPosition, float & transversalPosition, float & angularPosition);
+        float       getLongitudinalPosition(void);
+        float       getTransversalPosition(void);
+        float       getAngularPosition(void);
+        
+        //----------------------------------------------------------------------
+        // Joint Extension
+        //----------------------------------------------------------------------
+        // Sets
+        
+        void        setPWM(uint8_t jointNum, int16_t PWM);
+        void        setPower(uint8_t jointNumber, float power);
+        
+        //Gets
+        bool        getAvailable(uint8_t jointNum);
+        uint8_t     getNumber(uint8_t jointNum);
+        float       getGearRatio(uint8_t jointNum);    
+        uint16_t    getEncoderTicksPerRound(uint8_t jointNum);
+        uint8_t     getEncodingMode(uint8_t jointNum);
+        int16_t     getPwm(uint8_t jointNum);
+        uint16_t    getPwmResolution(uint8_t jointNum);
+        float       getPower(uint8_t jointNum);
+        int8_t      getDirection(uint8_t jointNum);       
+        int32_t     getEncoderCount(uint8_t jointNum);
+        float       getJointPosition(uint8_t jointNum);
+        float       getMotorPosition(uint8_t jointNum);
+        float       getMotorRPM(uint8_t jointNum);
+        float       getJointRPM(uint8_t jointNum);
+        float       getMotorAngVel(uint8_t jointNum);
+        float       getJointAngVel(uint8_t jointNum);
         
     private:
-        void baseInit(void);
+        void        baseInit(void);
+        
+        ArgonJoint* getJoint(uint8_t jointNum);
     
-        float _wheelRadius;
-        float _lengthBetweenFrontAndRearWheels;
-        float _lengthBetweenFrontWheels;
-        float _geomFactor;
+        float       _wheelRadius;
+        float       _lengthBetweenFrontAndRearWheels;
+        float       _lengthBetweenFrontWheels;
+        float       _geomFactor;
     };
     
 }
