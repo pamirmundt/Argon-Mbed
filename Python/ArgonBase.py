@@ -1,268 +1,113 @@
+from ArgonSerialNode import ArgonSerialNode
+from time import sleep
 import struct
-import wiringpi
-
-""" Check
-"""
-CHECK_SPI = 0x21
-
-""" Gets
-"""
-#Joint / Motor
-GET_WHEEL_RADIUS							= 0x22
-GET_GEAR_RATIO								= 0x23
-GET_ENCODER_TICKS_PER_ROUND					= 0x24
-GET_QUAD_ENCODER_TICKS_PER_ROUND			= 0x25
-GET_MAXIMUM_RPM								= 0x26
-GET_MAXIMUM_ANGULAR_VELOCITY				= 0x27
-GET_DIRECTION								= 0x28
-GET_PWM										= 0x29
-GET_POWER									= 0x2A
-GET_ENCODER_COUNT							= 0x2B
-GET_JOINT_RPM								= 0x2C
-GET_MOTOR_RPM								= 0x2D
-GET_JOINT_ANG_VEL							= 0x2E
-GET_MOTOR_ANG_VEL							= 0x2F
-GET_JOINT_POSITION							= 0x30
-GET_MOTOR_POSITION							= 0x31
 
 #Base
-GET_LENGTH_BETWEEN_FRONT_AND_REAR_WHEELS	= 0x40
-GET_LENGTH_BETWEEN_LEFT_AND_RIGHT_WHEELS	= 0x41
-#GET_BASE_VELOCITY							= 0x42
-GET_LONGITUDINAL_VELOCITY					= 0x43
-GET_TRANSVERSAL_VELOCITY					= 0x44
-GET_ANGULAR_VELOCITY						= 0x45
-#GET_POSITION								= 0x46
-GET_LONGITUDINAL_POSITION					= 0x47
-GET_TRANSVERSAL_POSITION					= 0x48
-GET_ANGULAR_POSITION						= 0x49
-#updatePosition								= 0x4A
+MODULE_NUMBER			= 1
+#Arm
+#MODULE_NUMBER			= 2
 
-""" Sets
-"""
-#SET_NAME 									= 0x60
-#SET_NUMBER 								= 0x61
-SET_WHEEL_RADIUS 							= 0x62
-SET_GEAR_RATIO 								= 0x63
-SET_ENCODER_TICKS_PER_ROUND 				= 0x64
-SET_QUAD_ENCODER_TICKS_PER_ROUND 			= 0x65
-SET_MAXIMUM_RPM 							= 0x66
-SET_MAXIMUM_ANGULAR_VELOCITY 				= 0x67
-SET_PWM 									= 0x68
-SET_DIRECTION 								= 0x69
-SET_POWER 									= 0x6A
+#Struct Types
+_char 					= 'c'
+_signed_char 			= 'b'
+_unsigned_char			= 'B'
+_bool					= '?'
+_short					= 'h'
+_unsigned_short			= 'H'
+_int					= 'i'
+_unsigned_int			= 'I'
+_long					= 'l'
+_unsigned_long			= 'L'
+_long_long				= 'q'
+_unsigned_long_long		= 'Q'
+_float					= 'f'
+_double					= 'd'
+
+#Commands
+#Sets
+SET_PWM							= 0x10
+SET_POWER						= 0x11
+
+#Gets
+GET_AVAILABLE					= 0x20 
+GET_NUMBER						= 0x21
+GET_GEAR_RATIO					= 0x22
+GET_ENCODER_TICKS_PER_ROUND		= 0x23
+GET_ENCODING_MODE				= 0x24
+GET_PWM							= 0x25
+
+'''
+GET_POWER						= 0x26
+GET_DIRECTION					= 0x27
+
+GET_ENCODER_COUNT				= 0x28
+GET_JOINT_POSITION				= 0x29
+GET_MOTOR_POSITION				= 0x30
+GET_MOTOR_RPM					= 0x3a
+GET_JOINT_RPM					= 0x3b
+GET_MOTOR_ANG_VEL				= 0x3c
+GET_JOINT_ANG_VEL				= 0x3d
+'''
+
 
 class ArgonBase:
-	def __init__(self, channel, speed = 1000000, mode = 0):
-		self.__channel = channel
-		self.__speed = speed
-		self.__mode = mode
-		wiringpi.wiringPiSetup()
-		wiringpi.wiringPiSPISetupMode(channel, speed, mode)
+	def __init__(self, device = '/dev/serial0', baud = 9600, timeout = 0.1):
+		self.__sn = ArgonSerialNode(device, baud, timeout)
 
-	def SPISendReceive(self, format, *args):
-		cmdStruct = struct.pack(format, *args)
-		wiringpi.wiringPiSPIDataRW(self.__channel, cmdStruct)
-		return struct.unpack(format, cmdStruct)
+	def sendRecv(self, CMD, jointNumber, msgType, msgSize):
+		pack = []
+		pack.extend( struct.pack('B', CMD) )
+		pack.extend( struct.pack('B', MODULE_NUMBER) )
+		pack.extend( struct.pack('B', jointNumber) )
+		#msg.extend( struct.pack(msgType, msgSize) )
 
-	def checkSPI(self):
-		if(self.SPISendReceive('BB', CHECK_SPI, 0) == (0xAA, 0xAA)):
-			return 0
-		return -1
+		if(self.__sn.sendMsg(pack)):
+			if(self.__sn.recvMsg()):
+				retMsg = self.__sn.readMsg()
+				if( retMsg[0:3] == pack[0:3]):
+					return struct.unpack(msgType, ''.join(retMsg[3:3+msgSize]))[0]
+					#Received MSG -> MSG_ID | Joint Number | Message(uint8_t)
 
-	""" Gets
-	"""
-	def getWheelRadius(self, wheelNumber):
-		if( self.SPISendReceive('BB', GET_WHEEL_RADIUS, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def sendOnly(self, CMD, jointNumber, msg, msgType):
+		pack = []
+		pack.extend( struct.pack('B', CMD) )
+		pack.extend( struct.pack('B', MODULE_NUMBER) )
+		pack.extend( struct.pack('B', jointNumber) )
+		pack.extend( struct.pack(msgType, msg) )
 
-	def getGearRatio(self, wheelNumber):
-		if( self.SPISendReceive('BB', GET_GEAR_RATIO, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+		if(self.__sn.sendMsg(pack)):
+			if(self.__sn.recvMsg()):
+				retMsg = self.__sn.readMsg()
+				if( retMsg[0:3] == pack[0:3]):
+					return True
+		return False
 
-	def getEncoderTicksPerRound(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_ENCODER_TICKS_PER_ROUND, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def setPWM(self, jointNumber, PWM):
+		return self.sendOnly(SET_PWM, jointNumber, PWM, _short)
 
-	def getQuadEncoderTicksPerRound(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_QUAD_ENCODER_TICKS_PER_ROUND, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def setPower(self, jointNumber, power):
+		return self.sendOnly(SET_POWER, jointNumber, power, _float)
 
-	def getMaximumRPM(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_MAXIMUM_RPM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def getAvailable(self, jointNumber):
+		return self.sendRecv(GET_AVAILABLE, jointNumber, _unsigned_char, 1)
 
-	def getMaximumAngularVelocity(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_MAXIMUM_ANGULAR_VELOCITY, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def getNumber(self, jointNumber):
+		return self.sendRecv(GET_NUMBER, jointNumber, _unsigned_char, 1)
 
-	def getDirection(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_DIRECTION, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('B', wheelNumber)[0]
-		else:
-			return -1
+	def getGearRatio(self, jointNumber):
+		return self.sendRecv(GET_GEAR_RATIO, jointNumber, _float, 4)
 
-	def getPWM(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_PWM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('h', wheelNumber)[0]
-		else:
-			return -1
+	def getEncoderTicksPerRound(self, jointNumber):
+		return self.sendRecv(GET_ENCODER_TICKS_PER_ROUND, jointNumber, _unsigned_short, 2)
 
-	def getPower(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_POWER, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+	def getEncodingMode(self, jointNumber):
+		return self.sendRecv(GET_ENCODING_MODE, jointNumber, _unsigned_char, 1)
 
-	def getEncoderCount(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_ENCODER_COUNT, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('h', wheelNumber)[0]
-		else:
-			return -1
+	def getPWM(self, jointNumber):
+		return self.sendRecv(GET_PWM, jointNumber, _short, 2)
 
-	def getJointRPM(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_JOINT_RPM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
+myBase = ArgonBase()
 
-	def getMotorRPM(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_MOTOR_RPM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
-
-	def getJointAngVel(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_JOINT_ANG_VEL, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
-
-	def getJointPosition(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_JOINT_POS, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
-
-	def getMotorPosition(self, wheelNumber):
-		if(self.SPISendReceive('BB', GET_MOTOR_POSITION, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', wheelNumber)[0]
-		else:
-			return -1
-
-	#Base
-	def getLengthBetweenFrontAndRearWheels(self):
-		if(self.SPISendReceive('BB', GET_LENGTH_BETWEEN_FRONT_AND_REAR_WHEELS, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getLengthBetweenFrontWheels(self):
-		if(self.SPISendReceive('BB', GET_LENGTH_BETWEEN_LEFT_AND_RIGHT_WHEELS, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getLongitudinalVelocity(self):
-		if(self.SPISendReceive('BB', GET_LONGITUDINAL_VELOCITY, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getTransversalVelocity(self):
-		if(self.SPISendReceive('BB', GET_TRANSVERSAL_VELOCITY, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getAngularVelocity(self):
-		if(self.SPISendReceive('BB', GET_ANGULAR_VELOCITY, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getLongitudinalPosition(self):
-		if(self.SPISendReceive('BB', GET_LONGITUDINAL_POSITION, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getTransversalPosition(self):
-		if(self.SPISendReceive('BB', GET_TRANSVERSAL_POSITION, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	def getAngularPosition(self):
-		if(self.SPISendReceive('BB', GET_ANGULAR_POSITION, 0) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', 0)[0]
-		else:
-			return -1
-
-	""" Sets
-	"""
-	def setWheelRadius(self, radius, wheelNumber):
-		if(self.SPISendReceive('BB', SET_WHEEL_RADIUS, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', radius)[0]
-		else:
-			return -1
-
-	def setGearRatio(self, gearRatio, wheelNumber):
-		if(self.SPISendReceive('BB', SET_GEAR_RATIO, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', gearRatio)[0]
-		else:
-			return -1
-
-	def setEncoderTicksPerRound(self, ticksPerRound, wheelNumber):
-		if(self.SPISendReceive('BB', SET_ENCODER_TICKS_PER_ROUND, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', ticksPerRound)[0]
-		else:
-			return -1
-
-	def setQuadEncoderTicksPerRound(self, quadTicksPerPeriod, wheelNumber):
-		if(self.SPISendReceive('BB', SET_QUAD_ENCODER_TICKS_PER_ROUND, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', quadTicksPerPeriod)[0]
-		else:
-			return -1
-
-	def setMaximumRPM(self, maxRPM, wheelNumber):
-		if(self.SPISendReceive('BB', SET_MAXIMUM_RPM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', maxRPM)[0]
-		else:
-			return -1
-
-	def setMaximumAngularVelocity(self, maxAngVel, wheelNumber):
-		if(self.SPISendReceive('BB', SET_MAXIMUM_ANGULAR_VELOCITY, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', maxAngVel)[0]
-		else:
-			return -1
-
-	def setPWM(self, pwm, wheelNumber):
-		if(self.SPISendReceive('BB', SET_PWM, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('h', pwm)[0]
-		else:
-			return -1
-
-	#def setDirection(self, direction, wheelNumber):
-	#	if(self.SPISendReceive('BB', SET_PWM, wheelNumber) == (0xAA, 0xAA)):
-	#		return self.SPISendReceive('B', direction)[0]
-	#	else:
-	#		return -1
-
-	def setPower(self, power, wheelNumber = 0):
-		if(self.SPISendReceive('BB', SET_POWER, wheelNumber) == (0xAA, 0xAA)):
-			return self.SPISendReceive('f', power)[0]
-		else:
-			return -1
+while(1):
+	print myBase.getPWM(2)
+	sleep(0.5)
