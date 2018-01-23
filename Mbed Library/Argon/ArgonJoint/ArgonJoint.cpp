@@ -16,7 +16,28 @@
 
 using namespace argon;
 
+/* Encoder transaction table for quadrature encoder (16 different positions for A and B)
+ * Decimal - Binary (prev state / new state) - Position result
+ * 1  - 00/00 - (0)
+ * 2  - 00/01 - (-1)
+ * 3  - 00/10 - (+1)
+ * 4  - 00/11 - (0)
+ * 5  - 01/00 - (+1)
+ * 6  - 01/01 - (0)
+ * 7  - 01/10 - (0)
+ * 8  - 01/11 - (-1)
+ * 9  - 10/00 - (-1)
+ * 10 - 10/01 - (0)
+ * 11 - 10/10 - (0)
+ * 12 - 10/11 - (+1)
+ * 13 - 11/00 - (0)
+ * 14 - 11/01 - (+1)
+ * 15 - 11/10 - (-1)
+ * 16 - 11/11 - (0)
+ */
 int8_t encoderIndex[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+
+
 
 TIM_HandleTypeDef * argon::_getRpmCalcTimer(void){
     return ArgonJointParams::rpm_calc_timer;
