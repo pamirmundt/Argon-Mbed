@@ -108,6 +108,34 @@ float ArgonBase::getGeomFactor(void){
     return _geomFactor;
 }
 
+void ArgonBase::getVelocity(float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity){
+    //return 0;    
+}
+float ArgonBase::getLongitudinalVelocity(void){
+    return 0;
+}
+float ArgonBase::getTransversalVelocity(void){
+    return 0;
+}
+float ArgonBase::getAngularVelocity(void){
+    return 0;
+}
+
+void ArgonBase::getPosition(float & longitudinalPosition, float & transversalPosition, float & angularPosition){
+    //return 0;
+}
+
+float ArgonBase::getLongitudinalPosition(void){
+    return 0;
+}
+float ArgonBase::getTransversalPosition(void){
+    return 0;
+}
+
+float ArgonBase::getAngularPosition(void){
+    return 0;
+}
+
 //------------------------------------------------------------------------------
 // Joint Extension
 //------------------------------------------------------------------------------

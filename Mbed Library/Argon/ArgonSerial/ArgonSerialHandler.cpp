@@ -370,5 +370,218 @@ void ArgonSerialHandler::messageParser(char * MSG, uint8_t size){
             
             break;
         }
+        
+        //----------------------------------------------------------------------
+        // Base Sets
+        //----------------------------------------------------------------------
+        
+        // ...
+        
+        //----------------------------------------------------------------------
+        // Base Gets
+        //----------------------------------------------------------------------
+        case ArgonSerialParams::GET_WHEEL_RADIUS:{
+            
+            argonSerial::float32Var wheelRadius;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                wheelRadius.data = this->_base->getWheelRadius();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //wheelRadius.data = this->_arm->getWheelRadius();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            wheelRadius.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            
+            break;
+        }
+        
+        case ArgonSerialParams::GET_LENGTH_BETWEEN_FRONT_AND_REAR_WHEELS:{
+            
+            argonSerial::float32Var length;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                length.data = this->_base->getLengthBetweenFrontAndRearWheels();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //length.data = this->_arm->getWheelRadius();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            length.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            
+            break;
+        }
+        
+        case ArgonSerialParams::GET_LENGTH_BETWEEN_FRONT_WHEELS:{
+            
+            argonSerial::float32Var length;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                length.data = this->_base->getLengthBetweenFrontWheels();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //length.data = this->_arm->getWheelRadius();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            length.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            
+            break;
+        }
+        
+        case ArgonSerialParams::GET_GEOM_FACTOR:{
+            
+            argonSerial::float32Var geomFactor;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                geomFactor.data = this->_base->getGeomFactor();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //geomFactor.data = this->_arm->getWheelRadius();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            geomFactor.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            
+            break;
+        }
+        
+        case ArgonSerialParams::GET_VELOCITY:{
+            /*
+            argonSerial::float32Var geomFactor;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                geomFactor.data = this->_base->getGeomFactor();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //geomFactor.data = this->_arm->getWheelRadius();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            geomFactor.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            */
+            break;
+        }
+        
+        case ArgonSerialParams::GET_LONGITUDINAL_VELOCITY:{
+
+            argonSerial::float32Var longVel;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                longVel.data = this->_base->getLongitudinalVelocity();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //longVel.data = this->_arm->getLongitudinalVelocity();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            longVel.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
+        
+        case ArgonSerialParams::GET_TRANSVERSAL_VELOCITY:{
+
+            argonSerial::float32Var transVel;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                transVel.data = this->_base->getTransversalVelocity();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //transVel.data = this->_arm->getTransversalVelocity();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            transVel.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
+        
+        case ArgonSerialParams::GET_ANGULAR_VELOCITY:{
+
+            argonSerial::float32Var angVel;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                angVel.data = this->_base->getAngularVelocity();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //angVel.data = this->_arm->getAngularVelocity();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            angVel.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
+        
+        case ArgonSerialParams::GET_POSITION:{
+            /*
+            argonSerial::float32Var angVel;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                angVel.data = this->_base->getAngularVelocity();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //angVel.data = this->_arm->getAngularVelocity();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            angVel.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+            */
+            break;
+        }
+        
+        case ArgonSerialParams::GET_LONGITUDINAL_POSITION:{
+
+            argonSerial::float32Var longPos;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                longPos.data = this->_base->getLongitudinalPosition();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //longPos.data = this->_arm->getLongitudinalPosition();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            longPos.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
+        
+        case ArgonSerialParams::GET_TRANSVERSAL_POSITION:{
+
+            argonSerial::float32Var transPos;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                transPos.data = this->_base->getTransversalPosition();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //transPos.data = this->_arm->getTransversalPosition();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            transPos.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
+        
+        case ArgonSerialParams::GET_ANGULAR_POSITION:{
+
+            argonSerial::float32Var angPos;
+            
+            if(module_num == ArgonSerialParams::BASE_CONFIGURATION && this->_base != NULL)
+                angPos.data = this->_base->getAngularPosition();
+            //else if(module_num == ArgonSerialParams::ARM_CONFIGURATION && this->_arm != NULL)
+                //angPos.data = this->_arm->getAngularPosition();
+            
+            // Sent Msg -> MSG_ID | Module Number | Joint Number | MSG
+            char msg[3 + sizeof(float)] = {msg_id, module_num, joint_num};
+            angPos.serialize((unsigned char*)msg + 3);
+            _serialNode.sendMsg(msg, sizeof(msg));
+
+            break;
+        }
     }
 }
