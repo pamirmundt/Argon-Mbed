@@ -4,7 +4,7 @@
 #include "ArgonJoint.h"
 #include "ArgonArmParams.h"
 
-namespace argon{
+namespace Argon{
 
     class ArgonArm{
     public:

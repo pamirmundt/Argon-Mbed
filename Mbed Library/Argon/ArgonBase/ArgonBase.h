@@ -4,7 +4,7 @@
 #include "ArgonJoint.h"
 #include "ArgonBaseParams.h"
 
-namespace argon{
+namespace Argon{
 
     class ArgonBase{
     public:
@@ -78,7 +78,7 @@ namespace argon{
         // Joint Extension
         //----------------------------------------------------------------------
         // Sets
-        void        setPWM(uint8_t jointNum, int16_t PWM);
+        void        setPwm(uint8_t jointNum, int16_t PWM);
         void        setPower(uint8_t jointNumber, float power);
         
         //Gets
@@ -94,10 +94,10 @@ namespace argon{
         int32_t     getEncoderCount(uint8_t jointNum);
         float       getJointPosition(uint8_t jointNum);
         float       getMotorPosition(uint8_t jointNum);
-        float       getMotorRPM(uint8_t jointNum);
         float       getJointRPM(uint8_t jointNum);
-        float       getMotorAngVel(uint8_t jointNum);
+        float       getMotorRPM(uint8_t jointNum);
         float       getJointAngVel(uint8_t jointNum);
+        float       getMotorAngVel(uint8_t jointNum);
         
     private:
         void        baseInit(void);

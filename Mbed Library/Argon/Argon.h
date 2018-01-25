@@ -1,13 +1,33 @@
 #ifndef ARGON_H
 #define ARGON_H
 
+/*******************************************************************************
+ * Serial (UART)
+ */
+#define serialTX        PA_9   
+#define serialRX        PA_10
+#define serialBaud      9600
+
+/*******************************************************************************
+ * Includes
+ ******************************************************************************/
 #include "ArgonArm.h"
 #include "ArgonBase.h"
-#include "ArgonSerialNode.h"
+#include "ArgonSerialHandler.h"
+
+/*******************************************************************************
+ * Namespaces
+ ******************************************************************************/
+using namespace Argon;
 
 /*******************************************************************************
  *  Timer Functions and Pin Configurations
  *******************************************************************************
+ *
+ *  Serial - UART
+ *      Serial TX - (PA_7) 
+ *      Serial RX - (PA_10)
+ *
  *
  *  Timer 2 (90Mhz) - Quadrature Encoder Reading for Joint 1 and 2
  *      Input Capture - Motor 1 Encoder A - (PA_0)

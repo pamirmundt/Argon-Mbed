@@ -2,7 +2,7 @@
 #include "ArgonBase.h"
 #include "hal_inits.h"
 
-using namespace argon;
+using namespace Argon;
 
 void ArgonBase::baseInit(void){
     
@@ -112,7 +112,7 @@ float ArgonBase::getGeomFactor(void){
 // Joint Extension
 //------------------------------------------------------------------------------
 // Sets
-void ArgonBase::setPWM(uint8_t jointNum,int16_t PWM){
+void ArgonBase::setPwm(uint8_t jointNum,int16_t PWM){
     getJoint(jointNum)->setPWM(PWM);
 }
 
@@ -169,18 +169,18 @@ float ArgonBase::getMotorPosition(uint8_t jointNum){
     return getJoint(jointNum)->getMotorPosition();
 }
 
-float ArgonBase::getMotorRPM(uint8_t jointNum){
-    return getJoint(jointNum)->getMotorRPM();
-}
-
 float ArgonBase::getJointRPM(uint8_t jointNum){
     return getJoint(jointNum)->getJointRPM();
 }
 
-float ArgonBase::getMotorAngVel(uint8_t jointNum){
-    return getJoint(jointNum)->getMotorAngVel();
+float ArgonBase::getMotorRPM(uint8_t jointNum){
+    return getJoint(jointNum)->getMotorRPM();
 }
 
 float ArgonBase::getJointAngVel(uint8_t jointNum){
     return getJoint(jointNum)->getJointAngVel();
+}
+
+float ArgonBase::getMotorAngVel(uint8_t jointNum){
+    return getJoint(jointNum)->getMotorAngVel();
 }

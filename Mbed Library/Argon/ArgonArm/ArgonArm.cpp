@@ -2,7 +2,7 @@
 #include "ArgonArm.h"
 #include "hal_inits.h"
 
-using namespace argon;
+using namespace Argon;
 
 void ArgonArm::armInit(void){
     

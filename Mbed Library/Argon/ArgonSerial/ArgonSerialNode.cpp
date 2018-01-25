@@ -4,7 +4,8 @@
 
 using namespace Argon;
 
-//extern Serial pc;
+// DEBUG
+// extern Serial pc;
 
 //const uint8_t STX = '\2';
 //const uint8_t ETX = '\3';

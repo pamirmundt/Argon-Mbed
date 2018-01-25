@@ -10,7 +10,7 @@ enum jointDirections{
     clockwise,
 };
 
-namespace argon{
+namespace Argon{
     
     TIM_HandleTypeDef * _getRpmCalcTimer(void);
 

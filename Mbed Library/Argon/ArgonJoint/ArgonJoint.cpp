@@ -14,7 +14,7 @@
 #define REV2RAD    (2.0f * M_PI)
 #endif
 
-using namespace argon;
+using namespace Argon;
 
 /* Encoder transaction table for quadrature encoder (16 different positions for A and B)
  * Decimal - Binary (prev state / new state) - Position result
@@ -39,7 +39,7 @@ int8_t encoderIndex[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
 
 
 
-TIM_HandleTypeDef * argon::_getRpmCalcTimer(void){
+TIM_HandleTypeDef * Argon::_getRpmCalcTimer(void){
     return ArgonJointParams::rpm_calc_timer;
 }
 
@@ -87,6 +87,12 @@ void ArgonJoint::_setMotorPosition(float motorPosition){
 
 // Functions
 void ArgonJoint::setPWM(int16_t PWM){
+    // Check if PWM is in range (-_pwmResolution < PWM < _pwmResolution)
+    if(_pwmResolution < PWM)
+        PWM = _pwmResolution;
+    else if( PWM < -_pwmResolution)
+        PWM = -_pwmResolution;
+    
     this->_PWM = PWM;
     this->_power = (float(PWM)/float(_pwmResolution))*100.0f;
 
