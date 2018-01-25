@@ -3,7 +3,7 @@ from ArgonSerialParams import *
 from ArgonSerialNode import ArgonSerialNode
 
 #Module Number			
-MODULE_NUMBER			= BASE
+MODULE_NUMBER 			= ARM
 
 '''
 	STRUCT TYPES
@@ -24,10 +24,10 @@ _float					= 'f'
 _double					= 'd'
 
 '''
-	BASE CLASS
+	ARM CLASS
 '''
-class ArgonBase:
-	def __init__(self, device = BASE_SERIAL_DEVICE, baud = BASE_SERIAL_BAUD, timeout = BASE_SERIAL_TIMEOUT):
+class ArgonArm:
+	def __init__(self, device = ARM_SERIAL_DEVICE, baud = ARM_SERIAL_BAUD, timeout = ARM_SERIAL_TIMEOUT):
 		self.__sn = ArgonSerialNode(device, baud, timeout)
 
 	def sendRecv(self, CMD, jointNumber, msgType, msgSize):
@@ -114,42 +114,3 @@ class ArgonBase:
 
 	def getMotorAngVel(self, jointNumber):
 		return self.sendRecv(GET_MOTOR_ANG_VEL, jointNumber, _float, 4)
-
-	'''
-		BASE METHODS
-	'''
-	def getWheelRadius(self):
-		return self.sendRecv(GET_WHEEL_RADIUS, 0, _float, 4)
-
-	def getLengthBetweenFrontAndRearWheels(self):
-		return self.sendRecv(GET_LENGTH_BETWEEN_FRONT_AND_REAR_WHEELS, 0, _float, 4)
-
-	def getLengthBetweenFrontWheels(self):
-		return self.sendRecv(GET_LENGTH_BETWEEN_FRONT_WHEELS, 0, _float, 4)
-
-	def getGeomFactor(self):
-		return self.sendRecv(GET_GEOM_FACTOR, 0, _float, 4)
-
-	#def getVelocity(float & longitudinalVelocity, float & transversalVelocity, float & angularVelocity):
-	#	return
-
-	def getLongitudinalVelocity(self):
-		return self.sendRecv(GET_LONGITUDINAL_VELOCITY, 0, _float, 4)
-
-	def getTransversalVelocity(self):
-		return self.sendRecv(GET_TRANSVERSAL_VELOCITY, 0, _float, 4)
-
-	def getAngularVelocity(self):
-		return self.sendRecv(GET_ANGULAR_VELOCITY, 0, _float, 4)
-
-	#def getPosition(float & longitudinalPosition, float & transversalPosition, float & angularPosition);
-	#	return
-
-	def getLongitudinalPosition(self):
-		return self.sendRecv(GET_LONGITUDINAL_POSITION, 0, _float, 4)
-
-	def getTransversalPosition(self):
-		return self.sendRecv(GET_TRANSVERSAL_POSITION, 0, _float, 4)
-
-	def getAngularPosition(self):
-		return self.sendRecv(GET_ANGULAR_POSITION, 0, _float, 4)

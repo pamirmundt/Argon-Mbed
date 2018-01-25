@@ -1,6 +1,5 @@
 import serial
 import struct
-from time import sleep
 
 MODE_FIRST_FF		= 0
 MODE_MSG_START		= 1
@@ -119,22 +118,3 @@ class ArgonSerialNode:
 		msg = self.__message_in
 		self.__message_in = []
 		return msg
-
-
-'''
-argon = ArgonSerial()
-
-
-while 1:
-
-	# Joint | MSG_ID | MSG
-	MSG = []
-	MSG.extend( struct.pack('B', 2) )
-	MSG.extend( struct.pack('B', 8) )
-	MSG.extend( struct.pack('f', 123.53) )
-
-	argon.sendMsg(MSG)
-	print argon.recvMsg()
-	#print("here")
-	#sleep(0.5)
-'''
