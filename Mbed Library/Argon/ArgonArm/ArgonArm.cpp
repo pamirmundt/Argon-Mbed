@@ -103,7 +103,7 @@ uint8_t ArgonArm::getDoF(void){
 // Joint Extension
 //------------------------------------------------------------------------------
 // Sets
-void ArgonArm::setPWM(uint8_t jointNum,int16_t PWM){
+void ArgonArm::setPwm(uint8_t jointNum,int16_t PWM){
     getJoint(jointNum)->setPWM(PWM);
 }
 
