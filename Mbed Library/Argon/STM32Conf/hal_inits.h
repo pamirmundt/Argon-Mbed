@@ -105,7 +105,7 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void _Error_Handler(char * file, int line);
+void _Error_Handler(const char * file, int line);
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim);
